@@ -33,6 +33,65 @@ function submitOfferRequest(data) {
   });
 }
 
+function uploadOfferPhoto(fileName, mimeType, base64Data) {
+  const apiUrl = getApiUrl();
+  if (!apiUrl) return Promise.reject(new Error('Not configured yet.'));
+  return fetchJsonWithRetry(apiUrl, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify({ action: 'uploadOfferPhoto', data: { fileName: fileName, mimeType: mimeType, base64Data: base64Data } })
+  });
+}
+
+/* ------------------------------------------------------------------ */
+/* Photo upload — each selected file uploads immediately (same pattern */
+/* as GuestHub's room-photo admin upload), so by the time the form is   */
+/* submitted every photo is already a Drive URL, not a pending upload.  */
+/* ------------------------------------------------------------------ */
+
+const MAX_PHOTOS = 6;
+let uploadedPhotoUrls = [];
+
+document.getElementById('photoInput').addEventListener('change', function() {
+  const files = Array.prototype.slice.call(this.files);
+  const room = MAX_PHOTOS - uploadedPhotoUrls.length;
+  if (room <= 0) { this.value = ''; return; }
+  files.slice(0, room).forEach(uploadOnePhoto_);
+  this.value = ''; // lets the same file be re-picked later if removed
+});
+
+function uploadOnePhoto_(file) {
+  const thumbs = document.getElementById('photoThumbs');
+  const thumb = document.createElement('div');
+  thumb.className = 'photo-thumb uploading';
+  thumb.textContent = 'Uploading…';
+  thumbs.appendChild(thumb);
+
+  const reader = new FileReader();
+  reader.onload = function(ev) {
+    const base64Data = ev.target.result.split(',')[1];
+    uploadOfferPhoto(file.name, file.type || 'image/jpeg', base64Data).then(function(res) {
+      if (!res.ok) { thumb.className = 'photo-thumb failed'; thumb.textContent = 'Failed'; return; }
+      uploadedPhotoUrls.push(res.url);
+      thumb.className = 'photo-thumb';
+      thumb.innerHTML = '<img src="' + res.url + '" alt="">' +
+        '<button type="button" class="photo-thumb-remove" aria-label="Remove photo">×</button>';
+      thumb.querySelector('.photo-thumb-remove').addEventListener('click', function() {
+        uploadedPhotoUrls = uploadedPhotoUrls.filter(function(u) { return u !== res.url; });
+        thumb.remove();
+      });
+    }).catch(function() {
+      thumb.className = 'photo-thumb failed'; thumb.textContent = 'Failed';
+    });
+  };
+  reader.readAsDataURL(file);
+}
+
+function resetPhotos_() {
+  uploadedPhotoUrls = [];
+  document.getElementById('photoThumbs').innerHTML = '';
+}
+
 /* ------------------------------------------------------------------ */
 /* VIN auto-decode — free NHTSA vPIC API, no key, CORS-enabled. Plate    */
 /* lookup has no free equivalent (needs a paid provider + a state), so   */
@@ -114,7 +173,8 @@ document.getElementById('offerForm').addEventListener('submit', function(e) {
     contactName: document.getElementById('contactName').value.trim(),
     contactEmail: document.getElementById('contactEmail').value.trim(),
     contactPhone: document.getElementById('contactPhone').value.trim(),
-    notes: document.getElementById('notes').value.trim()
+    notes: document.getElementById('notes').value.trim(),
+    photoUrls: uploadedPhotoUrls.join(',')
   }).then(function(res) {
     btn.disabled = false;
     if (!res.ok) { status.textContent = res.error || 'Could not send your request.'; status.className = 'form-status err'; return; }
@@ -123,6 +183,7 @@ document.getElementById('offerForm').addEventListener('submit', function(e) {
       'Thanks — we\'ve got your request (' + res.id + '). We\'ll email you an offer soon.';
     document.getElementById('confirmOverlay').hidden = false;
     document.getElementById('offerForm').reset();
+    resetPhotos_();
     document.getElementById('vinField').hidden = false;
     document.getElementById('plateField').hidden = true;
     idType = 'vin';

@@ -91,6 +91,11 @@
           <textarea id="notes" placeholder="No title, needs pickup this week, etc."></textarea>
         </label>
 
+        <label class="field">Photos (optional, up to 6)
+          <input type="file" id="photoInput" accept="image/*" multiple>
+        </label>
+        <div class="photo-thumbs" id="photoThumbs"></div>
+
         <button type="submit" class="btn-primary" id="submitBtn">Get Your Offer</button>
         <p class="form-status" id="formStatus"></p>
       </form>
