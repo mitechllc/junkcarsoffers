@@ -71,7 +71,12 @@ function uploadOnePhoto_(file) {
   reader.onload = function(ev) {
     const base64Data = ev.target.result.split(',')[1];
     uploadOfferPhoto(file.name, file.type || 'image/jpeg', base64Data).then(function(res) {
-      if (!res.ok) { thumb.className = 'photo-thumb failed'; thumb.textContent = 'Failed'; return; }
+      if (!res.ok) {
+        thumb.className = 'photo-thumb failed';
+        thumb.textContent = res.error || 'Failed';
+        console.error('Photo upload failed:', res.error);
+        return;
+      }
       uploadedPhotoUrls.push(res.url);
       thumb.className = 'photo-thumb';
       thumb.innerHTML = '<img src="' + res.url + '" alt="">' +
@@ -80,8 +85,10 @@ function uploadOnePhoto_(file) {
         uploadedPhotoUrls = uploadedPhotoUrls.filter(function(u) { return u !== res.url; });
         thumb.remove();
       });
-    }).catch(function() {
-      thumb.className = 'photo-thumb failed'; thumb.textContent = 'Failed';
+    }).catch(function(err) {
+      thumb.className = 'photo-thumb failed';
+      thumb.textContent = String(err.message || err);
+      console.error('Photo upload error:', err);
     });
   };
   reader.readAsDataURL(file);
