@@ -5,7 +5,7 @@ visitor enters their VIN or plate plus contact info; that becomes a new row in
 the **OfferRequests** tab of the same Google Sheet `junk_cars_infra` already
 runs — Nyang/Commandor then review and respond to it from the **Offer
 Requests** tab inside `junk_cars_web` (`junkyard.ezbettor.io`), which emails
-the customer their offer.
+the customer their offer..
 
 This repo has **no backend of its own** — it's a static site + a tiny
 Cloudflare Worker, talking to the *existing* `junk_cars_infra` Apps Script
