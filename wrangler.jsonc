@@ -1,0 +1,14 @@
+{
+  "name": "junkcarsoffers",
+  "compatibility_date": "2025-01-01",
+  "main": "src/worker.js",
+  "assets": {
+    "directory": "./",
+    "binding": "ASSETS",
+    "not_found_handling": "404-page"
+  }
+  // APPS_SCRIPT_URL is a secret, not a var — set via `wrangler secret put APPS_SCRIPT_URL`
+  // (or pushed by the deploy workflow from the GitHub secret of the same name). Use the
+  // SAME Apps Script exec URL junk_cars_web already uses — this site and junk_cars_web
+  // are two frontends for the one junk_cars_infra backend. Never committed here.
+}

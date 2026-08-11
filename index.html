@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Junkyard Ledger — Get Cash For Your Junk Car</title>
+<meta name="theme-color" content="#14161a">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css?v=1">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <span class="brand">Junkyard Ledger</span>
+    <a class="phone-link" href="tel:" id="phoneLink" hidden></a>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="hero-copy">
+      <p class="eyebrow">Get Cash For Your Junk Car</p>
+      <h1>We'll give you a real offer — no games.</h1>
+      <ul class="check-list">
+        <li>Tell us about your car</li>
+        <li>We review it and email you an offer</li>
+        <li>Accept it and we schedule pickup</li>
+      </ul>
+    </div>
+
+    <div class="offer-card" id="offerCard">
+      <h2>What's Your Car Worth?</h2>
+
+      <div class="id-toggle" id="idToggle">
+        <button type="button" class="id-toggle-btn active" data-id-type="vin">VIN</button>
+        <button type="button" class="id-toggle-btn" data-id-type="plate">License Plate</button>
+      </div>
+
+      <form id="offerForm" autocomplete="off">
+        <label class="field" id="vinField">
+          VIN
+          <input type="text" id="vin" placeholder="17-character VIN" maxlength="17">
+        </label>
+        <label class="field" id="plateField" hidden>
+          License Plate
+          <input type="text" id="plate" placeholder="Plate number">
+        </label>
+
+        <div class="field-row">
+          <label class="field">Year
+            <input type="text" id="year" inputmode="numeric" placeholder="e.g. 2014">
+          </label>
+          <label class="field">Make
+            <input type="text" id="make" placeholder="e.g. Toyota">
+          </label>
+          <label class="field">Model
+            <input type="text" id="model" placeholder="e.g. Camry">
+          </label>
+        </div>
+
+        <label class="field">Condition
+          <select id="condition">
+            <option value="Running">Running</option>
+            <option value="Not Running">Not Running</option>
+            <option value="Wrecked / Accident">Wrecked / Accident</option>
+            <option value="Missing Parts">Missing Parts</option>
+            <option value="Other">Other</option>
+          </select>
+        </label>
+
+        <label class="field">City / ZIP
+          <input type="text" id="location" placeholder="Where is the car?">
+        </label>
+
+        <div class="field-row">
+          <label class="field">Your Name *
+            <input type="text" id="contactName" required>
+          </label>
+          <label class="field">Phone *
+            <input type="tel" id="contactPhone" required>
+          </label>
+        </div>
+        <label class="field">Email *
+          <input type="email" id="contactEmail" required>
+        </label>
+        <label class="field">Anything else we should know?
+          <textarea id="notes" placeholder="No title, needs pickup this week, etc."></textarea>
+        </label>
+
+        <button type="submit" class="btn-primary" id="submitBtn">Get Your Offer</button>
+        <p class="form-status" id="formStatus"></p>
+      </form>
+
+      <p class="fine-print">We'll email you an offer — usually within a day. No obligation to accept.</p>
+    </div>
+  </section>
+
+  <section class="how-it-works">
+    <h2>How It Works</h2>
+    <div class="steps">
+      <div class="step">
+        <span class="step-num">1</span>
+        <h3>Tell Us About Your Car</h3>
+        <p>VIN or plate, condition, and how to reach you.</p>
+      </div>
+      <div class="step">
+        <span class="step-num">2</span>
+        <h3>We Send You An Offer</h3>
+        <p>We review the details and email you a real offer — no pressure.</p>
+      </div>
+      <div class="step">
+        <span class="step-num">3</span>
+        <h3>Schedule Pickup, Get Paid</h3>
+        <p>Accept the offer and we'll set up a pickup time that works for you.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div class="modal-overlay" id="confirmOverlay" hidden>
+  <div class="modal">
+    <h3>Request Sent ✓</h3>
+    <p id="confirmText"></p>
+    <button type="button" class="btn-primary" id="confirmCloseBtn">Done</button>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <a href="https://mitechnology.org" target="_blank" rel="noopener">Built by M.I Tech LLC</a>
+</footer>
+
+<script src="config.js"></script>
+<script src="app.js?v=1"></script>
+</body>
+</html>
