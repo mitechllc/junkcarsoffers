@@ -64,6 +64,9 @@ main { max-width: 1000px; margin: 0 auto; padding: 0 20px; }
   display: block; font-size: 12px; text-transform: uppercase;
   letter-spacing: 0.05em; color: var(--steel); margin-bottom: 14px;
 }
+.vin-lookup-status { font-size: 12px; color: var(--steel); margin: -10px 0 14px; min-height: 15px; }
+.vin-lookup-status.ok  { color: var(--good); }
+.vin-lookup-status.err { color: var(--bad); }
 .field-row { display: flex; gap: 10px; }
 .field-row .field { flex: 1; }
 .field input, .field select, .field textarea {
